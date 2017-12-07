@@ -133,5 +133,5 @@ def create_live():
     if form.validate_on_submit():
         form.create_live()
         flash('live create success', 'success')
-        return redirect(url_for('admin.lives'))
+        return redirect(url_for('admin.live'))
     return render_template('admin/create_live.html', form=form)

@@ -86,5 +86,6 @@ class LiveForm(FlaskForm):
 
     def create_live(self):
         live = Live()
+        self.populate_obj(live)
         db.session.add(live)
         db.session.commit()

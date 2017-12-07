@@ -8,7 +8,7 @@ Admin - lives
 {% block operation %}
 <a href="{{ url_for('admin.create_live') }}" type="button" class="btn btn-primary">
   <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-  Add Live
+  添加直播
 </a>
 {% endblock %}
 
@@ -41,5 +41,5 @@ Admin - lives
     </tbody>
   </thead>
 </table>
-{{ render_pagination(pagination, 'admin.lives') }}
+{{ render_pagination(pagination, 'admin.live') }}
 {% endblock %}
