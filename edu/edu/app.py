@@ -5,6 +5,7 @@ from edu.config import configs
 from edu.models import db, User
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_sockets import Sockets
 
 
 def register_extensions(app):
@@ -22,11 +23,13 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
-    from .handlers import front, course, admin, live
+    from .handlers import front, course, admin, live, ws
     app.register_blueprint(front)
     app.register_blueprint(course)
     app.register_blueprint(admin)
     app.register_blueprint(live)
+    sockets = Sockets(app)
+    sockets.register_blueprint(ws)
 
 
 def create_app(config):
