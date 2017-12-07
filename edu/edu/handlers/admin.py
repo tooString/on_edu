@@ -5,8 +5,8 @@ from flask import render_template
 from flask import request, current_app
 from flask import redirect, url_for, flash
 from edu.decorators import admin_required
-from edu.models import db, Course, User
-from edu.forms import CourseForm, RegisterForm
+from edu.models import db, Course, User, Live
+from edu.forms import CourseForm, RegisterForm, LiveForm
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -112,3 +112,26 @@ def delete_user(user_id):
     db.session.commit()
     flash('用户已经被删除', 'success')
     return redirect(url_for('admin.users'))
+
+
+@admin.route('/live')
+@admin_required
+def live():
+    page = request.args.get('page', default=1, type=int)
+    pagination = Live.query.paginate(
+        page=page,
+        per_page=current_app.config['ADMIN_PER_PAGE'],
+        error_out=False
+    )
+    return render_template('admin/lives.html', pagination=pagination)
+
+
+@admin.route('/live/create', methods=['GET', 'POST'])
+@admin_required
+def create_live():
+    form = LiveForm()
+    if form.validate_on_submit():
+        form.create_live()
+        flash('live create success', 'success')
+        return redirect(url_for('admin.lives'))
+    return render_template('admin/create_live.html', form=form)

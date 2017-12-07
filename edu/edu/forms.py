@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms import TextAreaField, IntegerField
 from wtforms.validators import Length, Email, EqualTo, Required, NumberRange, URL
-from edu.models import db, User, Course
+from edu.models import db, User, Course, Live
 from wtforms import ValidationError
 
 
@@ -73,3 +73,18 @@ class CourseForm(FlaskForm):
         db.session.add(course)
         db.session.commit()
         return course
+
+
+class LiveForm(FlaskForm):
+    name = StringField('直播名称', validators=[Required(), Length(1, 128)])
+    user_id = IntegerField('直播用户ID', validators=[Required(), NumberRange(min=1, message='无效用户ID')])
+    submit = SubmitField('提交')
+
+    def validate_user_id(self, field):
+        if not User.query.get(self.user_id.data):
+            raise ValidationError('用户不存在')
+
+    def create_live(self):
+        live = Live()
+        db.session.add(live)
+        db.session.commit()
